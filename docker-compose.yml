@@ -1,0 +1,71 @@
+# version: '2.0'
+# services:
+#   server:
+#     build:
+#       context: ./server
+#       dockerfile: Dockerfile
+#     container_name: server
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - dbplataforma
+#     volumes:
+#       - ./server:/home/plataformaServer
+  
+  # dbplataforma:
+  #   image: mysql
+  #   container_name: dbplataforma
+  #   ports:
+  #     - 33060:3306
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=Pl4t0rm41_3
+  #   volumes:
+  #     - mysql-db:/var/lib/mysql
+  #     - ./server/init:/docker-entrypoint-initdb.d
+
+#   client:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     container_name: client
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - server
+#     volumes:
+#       - ./frontend:/home/plataformaClient
+
+# volumes:
+#   mysql-db:
+
+version: '1.0'
+services:
+  server:
+    image: luciano275/plataforma-server
+    container_name: server
+    command: npm run dev
+    depends_on:
+      - dbplataforma
+    ports:
+      - "5000:5000"
+  dbplataforma:
+    image: mysql
+    container_name: dbplataforma
+    ports:
+      - 33060:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=Pl4t0rm41_3
+    volumes:
+      - mysql-db:/var/lib/mysql
+      - ./server/init:/docker-entrypoint-initdb.d
+  client:
+    image: luciano275/plataforma-client
+    container_name: client
+    command: npm run dev
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    
+volumes:
+  mysql-db:
